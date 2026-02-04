@@ -1,0 +1,122 @@
+% ID: P002
+% Title: Iterating the square of digit sum on 2^1990
+% Tags: number theory, digit sums, dynamical systems
+% Source: IMO SL 1990 Problem 8, https://artofproblemsolving.com/community/c6h220947p1225217
+
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage[a4paper, total={7in,10.2in}]{geometry}
+\usepackage{parskip}
+\setlength{\parskip}{1em}
+
+\title{P002 — IMO SL 1990 Problem 8}
+\author{Chuah Jia Herng}
+\date{February 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Problem}
+For a given positive integer $k$ denote the square of the sum of its digits by $f_1(k)$ and let
+$f_{n+1}(k)=f_1(f_n(k))$. Determine the value of $f_{1991}(2^{1990})$.
+
+\section*{Idea}
+Let $s(n)$ be the sum of decimal digits of $n$, so $f_1(n)=s(n)^2$.
+Since $s(n)\equiv n\pmod 9$, we get $f_{m+1}(k)\equiv f_m(k)^2\pmod 9$.
+For $k=2^{1990}$ this forces the residues modulo $9$ to alternate between $4$ and $7$.
+Separately, repeated digit-sum squaring rapidly drives the values below $100$,
+forcing entry into the $2$-cycle $169\leftrightarrow 256$; the parity of $m$ then determines the answer.
+
+\section*{Solution}
+
+\subsection*{Step 1: A modulo $9$ recurrence}
+Let $s(n)$ denote the sum of decimal digits of $n$. Then $f_1(n)=s(n)^2$.
+Since $s(n)\equiv n\pmod 9$ for all integers $n$, we have
+\[
+f_1(x)=s(x)^2\equiv x^2 \pmod 9.
+\]
+Hence for all $m\ge 1$,
+\[
+f_{m+1}(k)=f_1(f_m(k))\equiv f_m(k)^2 \pmod 9.
+\tag{1}
+\]
+
+Now $2^6\equiv 1\pmod 9$, and $1990\equiv 4\pmod 6$, so
+\[
+2^{1990}\equiv 2^4=16\equiv 7\pmod 9.
+\]
+Therefore
+\[
+f_1(2^{1990})\equiv (2^{1990})^2 \equiv 7^2\equiv 4\pmod 9.
+\]
+Using (1), the residues evolve by squaring:
+\[
+4\mapsto 4^2\equiv 7,\qquad 7\mapsto 7^2\equiv 4.
+\]
+Thus
+\[
+f_m(2^{1990})\equiv
+\begin{cases}
+4 \pmod 9,& m\text{ odd},\\
+7 \pmod 9,& m\text{ even}.
+\end{cases}
+\tag{2}
+\]
+
+\subsection*{Step 2: Rapid descent to small values}
+The number $2^{1990}$ has $599$ digits, hence
+\[
+s(2^{1990})\le 9\cdot 599=5391,
+\]
+and therefore
+\[
+f_1(2^{1990})=s(2^{1990})^2\le 5391^2<3\times 10^7.
+\]
+Thus $f_1(2^{1990})$ has at most $8$ digits, giving
+\[
+s(f_1(2^{1990}))\le 72 \quad\Rightarrow\quad
+f_2(2^{1990})\le 72^2=5184.
+\]
+Continuing similarly,
+\[
+f_3(2^{1990})\le 36^2=1296,\qquad
+f_4(2^{1990})\le 18^2=324,\qquad
+f_5(2^{1990})\le 9^2=81.
+\]
+
+Hence $f_5(2^{1990})$ is a perfect square not exceeding $81$.
+By (2), $f_5(2^{1990})\equiv 4\pmod 9$, so
+\[
+f_5(2^{1990})\in\{4,49\}.
+\]
+
+\subsection*{Step 3: Entry into a $2$-cycle}
+The subsequent values are forced:
+\[
+f_1(4)=16,\quad f_1(16)=49,\quad f_1(49)=169,\quad
+f_1(169)=256,\quad f_1(256)=169.
+\]
+Thus the sequence eventually enters the $2$-cycle
+\[
+169 \leftrightarrow 256.
+\]
+
+Moreover,
+\[
+169\equiv 7\pmod 9,\qquad 256\equiv 4\pmod 9,
+\]
+so by (2) we must have $f_m(2^{1990})=256$ for odd $m$ and $169$ for even $m$
+once the cycle is reached.
+
+Since $1991$ is odd,
+\[
+f_{1991}(2^{1990})=256.
+\]
+
+
+\section*{Answer}
+\[
+\boxed{256}.
+\]
+
+\end{document}
