@@ -1,0 +1,77 @@
+% ID: P001
+% Title: Continuous solutions to f(x) = (x+1)f(x^2)
+% Tags: functional equations, continuity
+% Source: SMMC 2024 B2, https://artofproblemsolving.com/community/c6h3418646p32922452
+
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage[a4paper, total={7in,10.2in}]{geometry}
+\usepackage{parskip}
+\setlength{\parskip}{1em}
+
+\title{P001 — SMMC 2024 B2}
+\author{Chuah Jia Herng}
+\date{February 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Problem}
+Determine all continuous functions $f : \mathbb{R}\setminus\{1\}\to\mathbb{R}$ such that
+\[
+f(x)=(x+1)f(x^2)
+\]
+for all $x\in \mathbb{R}\setminus\{-1,1\}$.
+
+\section*{Idea}
+Introduce $g(x)=(x-1)f(x)$ to remove the factor $(x+1)$.
+Then the equation becomes the self-similarity $g(x)=g(x^2)$.
+Iterating squaring sends $|x|<1$ to $0$, while iterating square-roots sends $x>1$ to $1^+$.
+Continuity at $-1$ forces a right-limit at $1^+$, which pins down $g$ for all $x>1$.
+
+\section*{Solution}
+Define $g(x)=(x-1)f(x)$ for $x\neq 1$. Since $f$ is continuous on $\mathbb{R}\setminus\{1\}$,
+so is $g$. For $x\neq \pm 1$,
+\[
+g(x)=(x-1)f(x)=(x-1)(x+1)f(x^2)=(x^2-1)f(x^2)=g(x^2).
+\tag{1}
+\]
+
+\textbf{Step 1: $g$ is constant on $(-1,1)$.}
+Fix $x\in(-1,1)$. Then $x^{2^n}\to 0$. By iterating (1),
+\[
+g(x)=g(x^{2^n})\quad\text{for all }n.
+\]
+Letting $n\to\infty$ and using continuity at $0$ gives $g(x)=g(0)$ for all $x\in(-1,1)$.
+Write $A:=g(0)$. By continuity at $-1$ (note $-1\in\mathbb{R}\setminus\{1\}$), we have $g(-1)=A$.
+
+\textbf{Step 2: the right-limit at $1$ equals $A$.}
+For $t>1$, set $x=-\sqrt t< -1$. Then $x^2=t$ and (1) gives $g(t)=g(x)$.
+Let $t\to 1^+$, so $x\to -1^-$. Continuity at $-1$ yields
+\[
+\lim_{t\to 1^+} g(t)=\lim_{x\to -1^-} g(x)=g(-1)=A.
+\tag{2}
+\]
+
+\textbf{Step 3: $g$ is constant on $(1,\infty)$.}
+Fix $y>1$ and define $y_n:=y^{1/2^n}$, so $y_n\to 1^+$. From (1),
+\[
+g(y)=g(y_n)\quad\text{for all }n.
+\]
+Letting $n\to\infty$ and using (2) gives $g(y)=A$. Hence $g(x)\equiv A$ for all $x>1$.
+
+\textbf{Step 4: $g$ is constant on $(\infty,\infty)$.}
+From $g(x) = g(x^2) = g(-x)$, since $g(x) = A$ for $x \ge 0$, $g(x) = A$ for $x \le 0$, i.e. $g(x)\equiv A$ for all $x\neq 1$.
+
+\textbf{Step 5: Describing $f$.}
+\[
+(x-1)f(x)=A \quad\Rightarrow\quad f(x)=\frac{A}{x-1}\qquad (x\neq 1).
+\]
+This function is continuous on $\mathbb{R}\setminus\{1\}$ and satisfies the given equation.
+
+\section*{Answer}
+\[
+\boxed{f(x)=\frac{c}{x-1}\ \text{for some constant }c\in\mathbb{R}.}
+\]
+
+\end{document}
