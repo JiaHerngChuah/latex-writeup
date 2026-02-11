@@ -1,0 +1,125 @@
+% ID: P005
+% Title: Multiples using a prescribed digit set (with all digits appearing)
+% Tags: number theory, base representation, pigeonhole principle
+% Source: original
+
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage[a4paper, total={7in,10.2in}]{geometry}
+\usepackage{parskip}
+\setlength{\parskip}{1em}
+
+\title{P005 — Multiples using a prescribed digit set}
+\author{Chuah Jia Herng}
+\date{February 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Problem}
+
+Let $b\ge 2$ be an integer base, and let
+\[
+0 \le u_1 < u_2 < \cdots < u_k \le b-1
+\]
+for some $k\ge 2$. Consider the digit set $D=\{u_1,u_2,\dots,u_k\}$.
+
+Determine all $(u_1,\dots,u_k)$ with the following property:
+
+\emph{For every positive integer $n$, there exists a positive multiple $N$ of $n$
+whose base-$b$ representation uses only digits from $D$, and moreover each digit in $D$
+appears at least once in the base-$b$ representation of $N$.}
+
+\section*{Idea}
+
+If $0\notin D$, then no number whose digits lie in $D$ can be divisible by $b$ (since a multiple
+of $b$ must end in digit $0$ in base $b$). Hence $0\in D$ is necessary.
+
+Assuming $0\in D$, we first solve the two-digit case $\{0,d\}$ using a classical repunit
+pigeonhole argument (and appending zeros to handle factors of $b$). Then for a general digit set
+$D=\{0,u_2,\dots,u_k\}$, we construct for each $u_i$ a multiple of $n$ using only digits $\{0,u_i\}$,
+and concatenate these blocks in base $b$. Concatenation preserves divisibility and guarantees every digit appears.
+
+\section*{Solution}
+
+\subsection*{Step 1: Necessity of $u_1=0$}
+
+Assume the stated property holds. Apply it to $n=b$.
+Any multiple of $b$ written in base $b$ must end with digit $0$, hence its base-$b$ representation
+must contain the digit $0$. Therefore $0\in D$, i.e.\ $u_1=0$.
+
+Thus $u_1=0$ is necessary.
+
+\subsection*{Step 2: A two-digit lemma}
+
+\paragraph{Lemma.}
+Let $b\ge2$, let $d\in\{1,2,\dots,b-1\}$, and let $n\ge1$.
+Then there exists a positive multiple $M$ of $n$ whose base-$b$ representation consists only of digits
+$0$ and $d$. Moreover, one can choose $M$ so that both digits $0$ and $d$ appear at least once.
+
+\emph{Proof.}
+Define the base-$b$ repunits
+\[
+R_k = 1+b+\cdots+b^{k-1}\qquad (k\ge1),
+\]
+whose base $b$ representation is the string $11\cdots 1$ of length $k$.
+
+First suppose $\gcd(n,b)=1$.
+Consider the $n+1$ residues modulo $n$:
+\[
+R_0:=0,\ R_1,\ R_2,\dots,\ R_n.
+\]
+By the pigeonhole principle, there exist $0\le i<j\le n$ such that
+$R_i\equiv R_j\pmod n$.
+Then
+\[
+0\equiv R_j-R_i=b^iR_{j-i}\pmod n.
+\]
+Since $\gcd(n,b)=1$, we may cancel $b^i$, obtaining $R_{j-i}\equiv 0\pmod n$.
+Thus $n\mid R_k$ for some $k$, hence $n\mid dR_k$, and $dR_k$ uses only digit $d$ in base $b$.
+
+For a general $n$, write $n=n_0 n_1$ where $n_0$ is the largest divisor of $n$ whose prime factors
+all divide $b$, so that $\gcd(n_1,b)=1$.
+Choose $t\ge0$ with $n_0\mid b^t$, and choose $k$ with $n_1\mid R_k$ by the coprime case.
+Then
+\[
+M_0 := b^t\cdot dR_k
+\]
+satisfies $n\mid M_0$, and its base-$b$ digits are only $0$ and $d$.
+
+Finally, if $M_0$ has no digit $0$ (this happens only when $t=0$), replace it by $M:=bM_0$.
+Then $n\mid M$ and the base-$b$ representation appends a trailing zero, so both digits $0$ and $d$
+appear. \hfill$\square$
+
+\subsection*{Step 3: Sufficiency when $u_1=0$ and $k\ge2$}
+
+Assume $u_1=0$ and $k\ge2$. Fix any $n\ge1$.
+
+For each $i=2,3,\dots,k$, apply the lemma with $d=u_i$ to obtain a positive multiple $M_i$ of $n$
+whose base-$b$ digits are only $0$ and $u_i$, and such that both digits $0$ and $u_i$ occur.
+Let $\ell_i$ be the number of base-$b$ digits of $M_i$.
+
+Define
+\[
+N := M_2\,b^{\ell_3+\cdots+\ell_k} + M_3\,b^{\ell_4+\cdots+\ell_k} + \cdots + M_{k-1}b^{\ell_k} + M_k.
+\]
+
+Each term is divisible by $n$, hence $n\mid N$.
+In base $b$, multiplying by $b^m$ shifts the representation left by $m$ digits (appending $m$ zeros),
+so the base-$b$ representation of $N$ is the concatenation of the representations of
+$M_2,M_3,\dots,M_k$.
+Therefore $N$ uses only digits from $D$, and for each $i\ge2$, the digit $u_i$ appears in $M_i$.
+Also, digit $0$ appears in every $M_i$, hence appears in $N$.
+
+Thus $N$ is a positive multiple of $n$, uses only digits from $D$, and contains every digit of $D$
+at least once.
+
+\section*{Conclusion}
+
+The stated property holds if and only if $u_1=0$ and $k\ge2$.
+
+\[
+\boxed{\text{All solutions are }(u_1,\dots,u_k)\text{ with }u_1=0\text{ and }k\ge2.}
+\]
+
+\end{document}

@@ -1,0 +1,162 @@
+% ID: P003
+% Title: Digit-deletion invariant multiples
+% Tags: number theory, modular arithmetic, decimal representation
+% Source: China High School League 2025 Round 2 P3, https://artofproblemsolving.com/community/c6h3649034p35860447
+
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage[a4paper, total={7in,10.2in}]{geometry}
+\usepackage{parskip}
+\setlength{\parskip}{1em}
+
+\title{P003 — Digit-deletion invariant multiples}
+\author{Chuah Jia Herng}
+\date{February 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Problem}
+
+Find all positive integers $n$ such that the following holds: There exists a multiple $N$ of $n$, whose decimal representation contain all digits but $0$, and for each $i\in \{ 1,2,\ldots,9\}$, one can delete a digit $i$ from the decimal representation of $N$, so that the resulting number is again a multiple of $n$.
+
+\section*{Idea}
+
+Deleting a digit from a decimal number changes its value by a highly structured amount.
+The condition that \emph{every} digit $1,\dots,9$ can be deleted while preserving divisibility by $n$
+forces strong arithmetic constraints on $n$.
+
+First, simple divisibility arguments exclude factors $3$ and $10$.
+Conversely, when $n$ has neither of these factors, we explicitly construct a suitable $N$ by
+combining modular control modulo $\gcd(n,10)=1$ with careful handling of powers of $2$ or $5$.
+
+\section*{Solution}
+
+\subsection*{Step 1: Necessary conditions}
+
+\paragraph{Claim 1.} $10 \nmid n$.
+
+\emph{Proof.}
+If $10 \mid n$, then every multiple of $n$ ends in digit $0$.
+This contradicts the requirement that $N$ contains no digit $0$.
+\hfill$\square$
+
+\paragraph{Claim 2.} $3 \nmid n$.
+
+\emph{Proof.}
+Assume $3 \mid n$. Then $3 \mid N$.
+Since digit $1$ appears in $N$, delete one occurrence of it to obtain $N'$.
+Divisibility by $3$ depends only on the sum of digits, and deleting a $1$ decreases the digit sum by $1$.
+Thus $3 \nmid N'$, contradicting the assumption.
+\hfill$\square$
+
+Hence any admissible $n$ must satisfy
+\[
+10 \nmid n \quad\text{and}\quad 3 \nmid n.
+\]
+
+\subsection*{Step 2: Two lemmas}
+
+\paragraph{Lemma 1.}
+Let $d$ be a positive integer with $\gcd(d,10)=1$.
+Then there exists an integer $k$ such that every residue class modulo $d$
+is represented by some $k$-digit decimal number containing no digit $0$.
+
+\emph{Proof.}
+For each $k\ge 1$, let $S_k$ be the set of residues modulo $d$ represented by
+$k$-digit numbers with no digit $0$.
+
+Fix $k$ and choose, for each $r\in S_k$, a representative $x_r$.
+Consider the two sets
+\[
+A=\{10^k+x_r : r\in S_k\}, \qquad
+B=\{2\cdot 10^k+x_r : r\in S_k\}.
+\]
+All numbers in $A\cup B$ have $k+1$ digits and contain no digit $0$,
+so their residues lie in $S_{k+1}$.
+
+The maps $r\mapsto 10^k+x_r$ and $r\mapsto 2\cdot 10^k+x_r$ are injective modulo $d$.
+If these two images had complete overlap modulo $d$, we would obtain
+$10^k \equiv 0 \pmod d$, contradicting $\gcd(d,10)=1$.
+Therefore,
+\[
+|S_{k+1}| \ge \min(d,\,2|S_k|).
+\]
+
+Since $|S_1|\ge 1$, repeated doubling implies that for sufficiently large $k$,
+$|S_k|=d$. Thus every residue class modulo $d$ is represented by a $k$-digit
+number with no digit $0$.
+\hfill$\square$
+
+\paragraph{Lemma 2.}
+Let $p\in\{2,5\}$ and $\alpha\ge 1$.
+There exists an $\alpha$-digit number containing no digit $0$
+that is divisible by $p^\alpha$.
+
+\emph{Proof.}
+We proceed by induction on $\alpha$.
+
+For $\alpha=1$, take $2$ or $5$.
+
+Assume the claim holds for $\alpha=t$ and let $M$ be a $t$-digit no-zero number
+with $p^t\mid M$.
+Consider numbers of the form $B=10^t a+M$, obtained by prepending a digit $a$.
+Then
+\[
+B = p^t\!\left(\left(\frac{10}{p}\right)^t a + \frac{M}{p^t}\right).
+\]
+Since $\gcd(10/p,p)=1$, the coefficient $(10/p)^t$ is invertible modulo $p$.
+Thus there exists $a\in\{0,1,\dots,p-1\}$ such that $p$ divides the bracketed term.
+If $a=0$, replace it by $p$, which is a valid nonzero digit.
+Hence $B$ is divisible by $p^{t+1}$ and contains no digit $0$.
+\hfill$\square$
+
+\subsection*{Step 3: Sufficiency and construction}
+
+Assume now that
+\[
+10 \nmid n \quad\text{and}\quad 3 \nmid n.
+\]
+Write
+\[
+n = p^\alpha d,
+\]
+where $p\in\{2,5\}$ (possibly $\alpha=0$) and $\gcd(d,10)=1$.
+
+Choose $k>\alpha$ as in Lemma~1.
+We construct
+\[
+N = A_1\,1\,A_2\,2\,\cdots\,A_9\,9\,B,
+\]
+where each $A_i$ is a $k$-digit no-zero block and $B$ is a $(k+\alpha)$-digit no-zero block.
+This ensures that $N$ contains digits $1,\dots,9$ and no zeros.
+
+Let $N_i$ denote the number obtained by deleting the displayed digit $i$.
+A direct computation shows
+\[
+N-N_i = (9X_i+i)\,10^{\ell_i},
+\]
+where $X_i$ is the prefix before that digit and $\ell_i\ge \alpha$.
+
+Using Lemma~1, choose the blocks $A_1,\dots,A_9$ inductively so that
+\[
+9X_i+i \equiv 0 \pmod d \quad (i=1,\dots,9).
+\]
+Then $d \mid (N-N_i)$ for all $i$.
+
+Next, by Lemma~2, choose an $\alpha$-digit no-zero number $B_2$ divisible by $p^\alpha$,
+and write $B=B_1B_2$ with $|B_1|=k$.
+Since $\gcd(d,10)=1$, we may choose $B_1$ so that $d\mid N$.
+Thus $n\mid N$.
+
+Finally, since $\ell_i\ge \alpha$, we have $p^\alpha \mid 10^{\ell_i}$, so
+$n\mid (N-N_i)$ for all $i$.
+Therefore $n\mid N_i$ for every digit deletion, as required.
+
+\section*{Remarks}
+
+The conditions $3\nmid n$ and $10\nmid n$ are both necessary and sufficient.
+The proof shows that the obstruction is purely arithmetic; once these two
+divisibility constraints are removed, an explicit construction is always possible.
+
+\end{document}
